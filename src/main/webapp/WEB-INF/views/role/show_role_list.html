@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="decorator" content="default" />
+<title>用户类型与罚金设置</title>
+</head>
+
+<body>
+
+	<div class="page-content">
+		<div class="page-header">
+			<h1>用户类型与罚金设置</h1>
+		</div>
+		<!-- /.page-header -->
+		<div class="row">
+			<div class="col-xs-12">
+				<!-- PAGE CONTENT BEGINS -->
+				<button class="btn btn-sm btn-purple" data-toggle="modal"
+									data-target="#add_role-modal">
+					<i class="icon-edit bigger-120"></i>增加用户类型
+				</button>
+<div id="add_role-modal" class="modal fade" tabindex="-1"
+		role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">增加用户类型</h4>
+				</div>
+				<div class="modal-body overflow-visible">
+					<form class="form-inline"
+						action="${ctx}/role/add"
+						id="add_role-form" method="post">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="from-group">
+									<div class="input-group">
+										<label class="col-sm-3 control-label no-padding-right">用户类型:</label>
+										<div class="col-sm-7">
+											<input type="text" name="roleName" class="col-xs-10 col-sm-5"
+												value=""/>
+										</div>
+										<label class="col-sm-3 control-label no-padding-right">类型code:</label>
+										<div class="col-sm-7">
+											<input type="text" name="roleCode"
+												class="col-xs-10 col-sm-5" value="" />
+										</div>
+										<label class="col-sm-3 control-label no-padding-right">可借书数量:</label>
+										<div class="col-sm-7">
+											<input type="text" name="canBorrowNumber"
+												class="col-xs-10 col-sm-5" value="" />
+										</div>
+										<label class="col-sm-3 control-label no-padding-right">逾期罚款:</label>
+										<div class="col-sm-7">
+											<input type="text" name="overdueFine"
+												class="col-xs-10 col-sm-5" value="" />
+										</div>
+										<label class="col-sm-3 control-label no-padding-right">遗失罚款:</label>
+										<div class="col-sm-7">
+											<input type="text" name="lostFine"
+												class="col-xs-10 col-sm-5" value="" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-info"
+						onclick="$('#add_role-form').submit();">
+						<i class="icon-ok"></i> 提交
+					</button>
+					<button class="btn btn-sm" data-dismiss="modal">
+						<i class="icon-remove"></i> 取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>			
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="table-responsive">
+							<table id="sample-table-1"
+								class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<!-- <th class="center"><label> <input type="checkbox"
+												class="ace" /> <span class="lbl"></span>
+										</label></th> -->
+										<th>用户类型</th>
+										<th>类型code</th>
+										<th>可借书数量</th>
+										<th>逾期罚款(该数值*天数)</th>
+										<th>遗失罚款(该数值*书原价)</th>
+										<th></th>									
+										<th></th> 
+									</tr>
+								</thead>
+								<tbody>
+									<#list roleList as role>
+									<tr>
+										<!-- <td class="center"><label> <input type="checkbox"
+												class="ace" /> <span class="lbl"></span>
+										</label></td> -->
+										<td>${role.roleName}</td>
+										<td>${role.roleCode}</td>
+										<td>${role.canBorrowNumber}
+										</td>
+										<td>${role.overdueFine}</td>
+										<td>${role.lostFine}</td>
+										<td>
+											<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+												<button class="btn btn-sm btn-purple"
+													onclick="editRole('${role.id}')"
+													data-rel="tooltip">
+													<span> <i class="icon-edit bigger-120"></i>编辑
+													</span>
+												</button>
+											</div>
+										</td>
+ 										<td>
+ 											<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+												<button class="btn btn-sm btn-danger"
+													onclick="deleteRoleInfo('${role.id}')"
+													data-rel="tooltip">
+													<span> <i class="icon-trash bigger-120"></i>删除
+													</span>
+												</button>
+											</div> 
+										</td> 
+									</tr>
+									</#list>
+								</tbody>
+							</table>
+						</div>
+						<#include "/common/common_page.html">
+						<!-- /.table-responsive -->
+					</div>
+					<!-- /span -->
+				</div>
+				<!-- /row -->
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.page-content -->
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"> <i
+		class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
+	<div id="edit_role-modal" class="modal fade" tabindex="-1"
+		role="dialog" >
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">编辑用户类型</h4>
+				</div>
+
+				<div class="modal-body overflow-visible">
+					<form id="edit_role-form" class="form-horizontal"
+						role="form" action="${ctx}/role/ajax/edit" method="post"></form>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-info"
+						onclick="$('#edit_role-form').submit();">
+						<i class="icon-ok"></i> 保存
+					</button>
+					<button class="btn btn-sm" data-dismiss="modal">
+						<i class="icon-remove"></i> 取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"> <i
+		class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
+
+
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+	function editRole(id) {
+	$('#edit_role-modal').modal('show');
+	$('#edit_role-form').load(
+			"${ctx}/role/edit?id=" + id,
+			function() {	
+			}
+		);
+    }
+$(function() {
+			$("#add_role-form").validate();
+			$("#add_role-form").bind(
+					'submit',
+					function() {
+						//校验表单
+						if (!$(this).valid()) {
+							return false;
+						}
+						ajaxSubmit(this, function(response) {
+							response = $.parseJSON(response);
+							if (response.status == 1) {
+								alert("添加成功！");
+								window.location.reload();
+							} else {
+								alert(response.errormsg);
+							}
+						});
+						return false;
+					});
+		 			$("#edit_book-form").validate();
+			$("#edit_role-form").bind(
+					'submit',
+					function() {
+						//校验表单
+						if (!$(this).valid()) {
+							return false;
+						}
+						ajaxSubmit(this, function(response) {
+							response = $.parseJSON(response);
+							if (response.status == 1) {
+								alert("修改成功！");
+								window.location.reload();
+							} else {
+								alert(response.errormsg);
+							}
+						});
+						return false;
+					});
+	});
+	function deleteRoleInfo(id) {
+		$.messager.confirm("删除用户类型", "确定要删除该用户类型吗!", function() {
+			window.open("${ctx}/role/delete?id=" + id,"_self");
+		});
+	}
+	</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="decorator" content="default" />
+<title>还书记录管理</title>
+</head>
+
+<body>
+
+	<div class="page-content">
+		<div class="page-header">
+			<h1>还书记录管理</h1>
+		</div>
+		<!-- /.page-header -->
+		<div class="row">
+			<div class="col-xs-12">
+				<!-- PAGE CONTENT BEGINS -->
+				<form class="form-inline" action="${ctx}/giveback/search"
+					method="post">
+					<div class="row">
+						<div class="col-xs-12 col-sm-8">
+							<div class="input-group">
+								书号：<input name="ISBN" value="${queryGiveBack.ISBN}"
+									type="text" class="input-small" /> 
+								书名：<input name="bookName" value="${queryGiveBack.bookName}" 
+									type="text" class="input-small" />
+								作者：<input name="author" value="${queryGiveBack.author}" 
+									type="text" class="input-small" />
+								出版社：<input name="publisher" value="${queryGiveBack.publisher}"
+									type="text" class="input-small" /> 
+									&nbsp;	
+								<button type="submit" class="btn btn-purple btn-sm">
+									查询 <i class="icon-search icon-on-right bigger-110"></i>
+								</button>
+								<br>
+								借书者姓名：<input name="readerName" value="${queryGiveBack.readerName}" 
+									type="text" class="input-small" />
+								借书者账号：<input name="account" value="${queryGiveBack.account}" 
+									type="text" class="input-small" />
+								是否逾期：
+									<select name="isOverdue" class="input-no">
+											<option value="">请选择</option>
+											<option value="0">否</option>
+											<option value="1">是</option>
+									</select>
+								是否丢失：
+									<select name="isLost" class="input-no">
+											<option value="">请选择</option>
+											<option value="0">否</option>
+											<option value="1">是</option>
+									</select>
+							</div>
+						</div>
+					</div>
+				</form> 
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="table-responsive">
+							<table id="sample-table-1"
+								class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<!-- <th class="center"><label> <input type="checkbox"
+												class="ace" /> <span class="lbl"></span>
+										</label></th> -->
+										<th>书号</th>
+										<th>书名</th>
+										<th>作者</th>
+										<th>出版社</th>
+										<th>借书者姓名</th>
+ 										<th>借书者账号</th> 
+										<th>是否逾期</th>
+										<th>是否丢失</th>
+										<th>应还金额(逾期或丢失)</th> 
+										<th></th>									
+									<!-- 	<th></th> -->
+									</tr>
+								</thead>
+								<tbody>
+									<#list givebackList as giveback>
+									<tr>
+										<!-- <td class="center"><label> <input type="checkbox"
+												class="ace" /> <span class="lbl"></span>
+										</label></td> -->
+										<td>${giveback.ISBN}</td>
+										<td>${giveback.bookName}</td>
+										<td>
+											${giveback.author}
+										</td>
+										<td>${giveback.publisher}</td>
+										<td>${giveback.readerName}</td>
+										<td>${giveback.account}</td>
+										<td>
+											<#if giveback.isOverdue==1>是</#if>
+											<#if giveback.isOverdue==0>否</#if>
+										</td>
+										<td>
+											<#if giveback.isLost==1>是</#if>
+											<#if giveback.isLost==0>否</#if>
+										</td>
+										<td>${giveback.needFeedMoney}</td>
+										<td>
+										</td>
+<!-- 										<td>
+ 											<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+												<button class="btn btn-sm btn-danger"
+													onclick="deleteGuideInfo('${guideInfo.id}')"
+													data-rel="tooltip">
+													<span> <i class="icon-trash bigger-120"></i>删除
+													</span>
+												</button>
+											</div> 
+										</td> -->
+									</tr>
+									</#list>
+								</tbody>
+							</table>
+						</div>
+						<#include "/common/common_page.html">
+						<!-- /.table-responsive -->
+					</div>
+					<!-- /span -->
+				</div>
+				<!-- /row -->
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.page-content -->
+
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"> <i
+		class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
+
+
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+
+	function deleteGuideInfo(id) {
+		$.messager.confirm("删除用户", "确定要删除该导购信息吗!", function() {
+			window.open("${ctx}/portal_guide/delete?id=" + id,"_self");
+		});
+	}
+	function confirmGuideInfo(id) {
+		$.messager.confirm("认证用户", "确定通过该导购身份认证吗!", function() {
+			window.open("${ctx}/portal_guide/confirm?id=" + id,"_self");
+		});
+	}
+	function noconfirmGuideInfo(id) {
+		$.messager.confirm("认证用户", "确定不通过该导购身份认证吗!", function() {
+			window.open("${ctx}/portal_guide/noconfirm?id=" + id,"_self");
+		});
+	}
+	</script>
+</body>
+</html>

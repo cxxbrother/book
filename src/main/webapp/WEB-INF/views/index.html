@@ -1,0 +1,207 @@
+<#assign shiro=JspTaglibs["/WEB-INF/tlds/shiro.tld"]/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>首页 - 图书管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<#include "/common/common_css.html">
+</head>
+
+<body>
+	<div class="navbar navbar-default" id="navbar">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('navbar', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<div class="navbar-container" id="navbar-container">
+			<!-- /.navbar-header -->
+
+			<div class="navbar-header pull-right" role="navigation">
+				<ul class="nav ace-nav">
+					<li class="light-blue"><a data-toggle="dropdown" href="#"
+						class="dropdown-toggle"> <!-- <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" /> -->
+							<span class="user-info"> <small>你好,</small>
+								${loginInfo.userName}
+						</span> <i class="icon-caret-down"></i>
+					</a>
+						
+						
+						<ul
+							class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<li><a href="#" onclick="resetPasswd()"> 修改密码 </a></li>
+							<li><a href="${ctx}/logout"> 注销 </a></li>
+						</ul></li>
+				</ul>
+				<!-- /.ace-nav -->
+			</div>
+			<!-- /.navbar-header -->
+		</div>
+		<!-- /.container -->
+	</div>
+
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<div class="main-container-inner">
+			<a class="menu-toggler" id="menu-toggler" href="#"> <span
+				class="menu-text"></span>
+			</a>
+
+			<div class="sidebar" id="sidebar">
+				<script type="text/javascript">
+					try {
+						ace.settings.check('sidebar', 'fixed')
+					} catch (e) {
+					}
+				</script>
+
+				<ul class="nav nav-list" id="navlist">
+					
+						
+					<@shiro.hasPermission name="portal:user:manage">		
+					<li><a href="${ctx}/portal_user/show_user_list" target="iframe_content">
+							<span class="menu-text"> 人员信息管理</span>
+					</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name="book:manage">	
+					<li><a href="${ctx}/book/show_book_list" target="iframe_content">
+							<span class="menu-text"> 图书信息管理</span>
+					</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name="borrow:manage">		
+					<li><a href="${ctx}/borrow/show_borrow_list" target="iframe_content">
+							<span class="menu-text"> 图书借阅管理</span>
+					</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name="back:manage">
+					<li><a href="${ctx}/giveback/show_giveback_list" target="iframe_content">
+							<span class="menu-text"> 还书记录管理</span>
+					</a></li>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name="user_type_fine:manage">
+		          	<li><a href="${ctx}/role/show_role_list" target="iframe_content">
+							<span class="menu-text"> 用户类型与罚金设置</span>
+					</a></li>
+					</@shiro.hasPermission>
+				<!-- /.nav-list -->
+
+				<div class="sidebar-collapse" id="sidebar-collapse">
+					<i class="icon-double-angle-left"
+						data-icon1="icon-double-angle-left"
+						data-icon2="icon-double-angle-right"></i>
+				</div>
+
+				<script type="text/javascript">
+					try {
+						ace.settings.check('sidebar', 'collapsed')
+					} catch (e) {
+					}
+				</script>
+			</div>
+
+			<div class="main-content">
+				<iframe width="100%" height="100%" frameborder="0" scrolling="auto"
+					style="margin: 0px; padding: 0px;" src="${ctx}/home"
+					id="iframe_content" name="iframe_content"></iframe>
+			</div>
+			<!-- /.main-content -->
+
+		</div>
+		<!-- /.main-container-inner -->
+
+	</div>
+	<!-- /.main-container -->
+	<div id="reset_passwd-modal" class="modal fade" tabindex="-1"
+		role="dialog" >
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">修改密码</h4>
+				</div>
+
+				<div class="modal-body overflow-visible">
+					<form id="reset_passwd-form" class="form-horizontal"
+						role="form" action="${ctx}/reset_passwd" method="post">
+										
+										<label class="col-sm-3 control-label no-padding-right">新密码:</label>
+										<div class="col-sm-7">
+											<input type="password" name="passwd"
+												class="col-xs-10 col-sm-5" value="" required min="1" max="14" />
+										</div>
+										<label class="col-sm-3 control-label no-padding-right"">再次输入新密码:</label>
+										<div class="col-sm-7">
+											<input type="password" name="rePasswd"
+												class="col-xs-10 col-sm-5" value="" required min="1" max="14" />
+										</div>						
+						
+						</form>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-info"
+						onclick="$('#reset_passwd-form').submit();">
+						<i class="icon-ok"></i> 保存
+					</button>
+					<button class="btn btn-sm" data-dismiss="modal">
+						<i class="icon-remove"></i> 取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<#include "/common/common_js.html">
+
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+	function resetPasswd() {
+	$('#reset_passwd-modal').modal('show');
+    }
+    $(function() {
+			$("#reset_passwd-form").validate();
+			$("#reset_passwd-form").bind(
+					'submit',
+					function() {
+						//校验表单
+						if (!$(this).valid()) {
+							return false;
+						}
+						ajaxSubmit(this, function(response) {
+							response = $.parseJSON(response);
+							if (response.status == 1) {
+								alert("修改成功！");
+								window.location.reload();
+							} else {
+								alert(response.errormsg);
+							}
+						});
+						return false;
+					});
+		 			$("#edit_book-form").validate();
+
+	});
+    
+    
+    
+		$(function() {
+			var height = $(document).height() - 60;
+			//$(".main-content").height(height + 'px');
+			$("#iframe_content").height(height + 'px');
+			$("#navlist li a").click(function() {
+				$("#navlist li").removeClass("active");
+				$(this).parent().addClass("active");
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="decorator" content="default" />
+<title>图书借阅管理</title>
+</head>
+
+<body>
+
+	<div class="page-content">
+		<div class="page-header">
+			<h1>图书借阅管理</h1>
+		</div>
+		<!-- /.page-header -->
+		<div class="row">
+			<div class="col-xs-12">
+				<!-- PAGE CONTENT BEGINS -->
+				<form class="form-inline" action="${ctx}/borrow/search"
+					method="post">
+					<div class="row">
+						<div class="col-xs-12 col-sm-8">
+							<div class="input-group">
+								书号：<input name="ISBN" value="${queryBorrowInfo.ISBN}"
+									type="text" class="input-small" /> 
+								书名：<input name="bookName" value="${queryBorrowInfo.bookName}" 
+									type="text" class="input-small" />
+								作者：<input name="author" value="${queryBorrowInfo.author}" 
+									type="text" class="input-small" />
+								出版社：<input name="publisher" value="${queryBorrowInfo.publisher}"
+									type="text" class="input-small" /> 
+									&nbsp;	
+								<button type="submit" class="btn btn-purple btn-sm">
+									查询 <i class="icon-search icon-on-right bigger-110"></i>
+								</button>
+								<br>
+								借书者姓名：<input name="readerName" value="${queryBorrowInfo.readerName}" 
+									type="text" class="input-small" />
+								借书者账号：<input name="account" value="${queryBorrowInfo.account}" 
+									type="text" class="input-small" />
+								是否已还书：
+									<select name="isBack" class="input-no">
+											<option value="">请选择</option>
+											<option value="0">未还</option>
+											<option value="1">已还</option>
+									</select>
+								&nbsp;	&nbsp;	&nbsp;	&nbsp;	
+								<button class="btn btn-sm btn-purple" data-toggle="modal"
+									data-target="#user_give_back-modal">
+									<i class="icon-edit bigger-120"></i>读者还书
+								</button>
+<!-- 								应还时间大于：<input name="deadline" value="${queryBorrowInfo.deadline}" 
+									type="text" class="input-small" />	
+								借书时间大于：<input name="borrowTime" value="${queryBorrowInfo.borrowTime}" 
+									type="text" class="input-small" />	
+								还书时间大于：<input name="backTime" value="${queryBorrowInfo.backTime}" 
+									type="text" class="input-small" /> -->
+							</div>
+						</div>
+					</div>
+				</form> 
+<div id="user_give_back-modal" class="modal fade" tabindex="-1"
+		role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">读者还书</h4>
+				</div>
+				<div class="modal-body overflow-visible">
+					<form class="form-inline"
+						action="${ctx}/borrow/user_back"
+						id="user_back-form" method="post">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="from-group">
+									<div class="input-group">
+									
+										<label class="col-sm-3 control-label no-padding-right">书号:</label>
+										<div class="col-sm-7">
+											<input type="text" name="ISBN" class="col-xs-10 col-sm-5"
+												value=""/>
+										</div>
+										<label class="col-sm-3 control-label no-padding-right">读者证件号:</label>
+										<div class="col-sm-7">
+											<input type="text" name="libraryCard"
+												class="col-xs-10 col-sm-5" value="" />
+										</div>
+										<label class="col-sm-3 control-label no-padding-right">是否遗失:</label>
+										<div class="col-sm-7">
+											<select name="isLost" class="input-no">
+													<option value="0">否</option>
+													<option value="1">是</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-info"
+						onclick="$('#user_back-form').submit();">
+						<i class="icon-ok"></i> 提交
+					</button>
+					<button class="btn btn-sm" data-dismiss="modal">
+						<i class="icon-remove"></i> 取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="table-responsive">
+							<table id="sample-table-1"
+								class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<!-- <th class="center"><label> <input type="checkbox"
+												class="ace" /> <span class="lbl"></span>
+										</label></th> -->
+										<th>书号</th>
+										<th>书名</th>
+										<th>作者</th>
+										<th>出版社</th>
+										<th>借书者姓名</th>
+ 										<th>借书者账号</th> 
+								<!--		<th>借书者证件</th>-->
+										<th>借书时间</th>
+										<th>应还时间</th>
+										<th>还书时间</th>
+										<th>是否已还书</th>
+										<th></th>									
+									<!-- 	<th></th> -->
+									</tr>
+								</thead>
+								<tbody>
+									<#list borrowInfoList as borrowInfo>
+									<tr>
+										<!-- <td class="center"><label> <input type="checkbox"
+												class="ace" /> <span class="lbl"></span>
+										</label></td> -->
+										<td>${borrowInfo.ISBN}</td>
+										<td>${borrowInfo.bookName}</td>
+										<td>
+											${borrowInfo.author}
+										</td>
+										<td>${borrowInfo.publisher}</td>
+										<td>${borrowInfo.readerName}</td>
+										<td>${borrowInfo.account}</td>
+<!-- 										<td>${borrowInfo.libraryCard}</td> -->
+										<td>${borrowInfo.borrowTime}</td>
+										<td>${borrowInfo.deadline}</td>
+										<td>${borrowInfo.backTime}</td>
+										<td>
+											<#if borrowInfo.isBack==1>已还</#if>
+											<#if borrowInfo.isBack==0>未还</#if>
+										</td>
+										<td>
+										</td>
+<!-- 										<td>
+ 											<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+												<button class="btn btn-sm btn-danger"
+													onclick="deleteGuideInfo('${guideInfo.id}')"
+													data-rel="tooltip">
+													<span> <i class="icon-trash bigger-120"></i>删除
+													</span>
+												</button>
+											</div> 
+										</td> -->
+									</tr>
+									</#list>
+								</tbody>
+							</table>
+						</div>
+						<#include "/common/common_page.html">
+						<!-- /.table-responsive -->
+					</div>
+					<!-- /span -->
+				</div>
+				<!-- /row -->
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.page-content -->
+
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"> <i
+		class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
+
+
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+$(function() {
+			$("#user_back-form").validate();
+			$("#user_back-form").bind(
+					'submit',
+					function() {
+						//校验表单
+						if (!$(this).valid()) {
+							return false;
+						}
+						ajaxSubmit(this, function(response) {
+							response = $.parseJSON(response);
+							if (response.status == 1) {
+								alert(response.errormsg);
+								window.location.reload();
+							} else {
+								alert(response.errormsg);
+							}
+						});
+						return false;
+					});
+	});
+	function deleteGuideInfo(id) {
+		$.messager.confirm("删除用户", "确定要删除该导购信息吗!", function() {
+			window.open("${ctx}/portal_guide/delete?id=" + id,"_self");
+		});
+	}
+	function confirmGuideInfo(id) {
+		$.messager.confirm("认证用户", "确定通过该导购身份认证吗!", function() {
+			window.open("${ctx}/portal_guide/confirm?id=" + id,"_self");
+		});
+	}
+	function noconfirmGuideInfo(id) {
+		$.messager.confirm("认证用户", "确定不通过该导购身份认证吗!", function() {
+			window.open("${ctx}/portal_guide/noconfirm?id=" + id,"_self");
+		});
+	}
+	</script>
+</body>
+</html>
